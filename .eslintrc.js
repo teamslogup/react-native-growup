@@ -25,6 +25,8 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     'prettier/prettier': 'error',
+    'import/prefer-default-export': 'off',
+    '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-use-before-define': [
       'error',
       {
@@ -38,6 +40,17 @@ module.exports = {
     '@typescript-eslint/no-throw-literal': 'off',
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'import/order': [
+      'error',
+      {
+        pathGroups: [
+          { pattern: 'react*', group: 'builtin', position: 'before' },
+          { pattern: '@src/**', group: 'external', position: 'after' },
+        ],
+        pathGroupsExcludedImportTypes: ['builtin'],
+        alphabetize: { order: 'asc' },
+      },
+    ],
   },
   settings: {
     react: {
