@@ -1,11 +1,7 @@
 import React, { ReactNode } from 'react';
-import {
-  GestureResponderEvent,
-  Pressable,
-  Text,
-  TextProps,
-} from 'react-native';
-import styled, { css, DefaultTheme, useTheme } from 'styled-components/native';
+import { GestureResponderEvent, Pressable, TextProps } from 'react-native';
+import { DefaultTheme, useTheme } from 'styled-components/native';
+import * as Styled from './styles';
 
 interface TypographyProps {
   fontSize?: number;
@@ -36,33 +32,16 @@ const Typography: React.FC<TypographyProps & TextProps> = function Typograph(
 
   return (
     <Pressable onPress={onPress}>
-      <StyledText
+      <Styled.Text
         fontSize={fontSize}
         textColor={textColor}
         underline={underline}
         {...textProps}
       >
         {children}
-      </StyledText>
+      </Styled.Text>
     </Pressable>
   );
 };
-
-interface StyledTextProps {
-  fontSize: number;
-  textColor: string;
-  underline: boolean;
-}
-
-const StyledText = styled(Text)<StyledTextProps>`
-  color: ${props => props.textColor};
-  font-size: ${props => props.fontSize}px;
-
-  ${props =>
-    props.underline &&
-    css`
-      text-decoration: underline;
-    `};
-`;
 
 export default Typography;

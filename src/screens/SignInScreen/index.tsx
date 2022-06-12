@@ -20,10 +20,11 @@ import {
   TextInput,
   Typography,
 } from '@src/components/atoms';
+import { strings } from '@src/constants';
 import { SignInParams } from '@src/data';
 import { useScreenNavigation } from '@src/navigations/hooks';
 import { userState } from '@src/services/recoil';
-import { StyledHelpText, StyledSocialView, StyledView } from './styles';
+import * as Styled from './styles';
 
 interface SignInState extends SignInParams {
   rememberId: boolean;
@@ -41,10 +42,10 @@ const SignInScreen: React.FC = function SignInScreen() {
       id: Yup.string()
         .matches(
           /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$/i,
-          '잘못된 이메일 형식입니다.',
+          strings.WRONG_EMAIL_FORM,
         )
-        .required('필수입력 항목입니다.'),
-      password: Yup.string().required('필수입력 항목입니다.'),
+        .required(strings.REQUIRED_FIELD),
+      password: Yup.string().required(strings.REQUIRED_FIELD),
       rememberId: Yup.boolean(),
       rememberUser: Yup.boolean(),
     }),
@@ -67,7 +68,7 @@ const SignInScreen: React.FC = function SignInScreen() {
         navigate('Home');
       } else {
         resetForm();
-        Alert.alert('아이디 혹은 패스워드가 잘못되었습니다.');
+        Alert.alert(strings.WRONG_ID_OR_PASSWORD);
       }
     },
   });
@@ -78,14 +79,14 @@ const SignInScreen: React.FC = function SignInScreen() {
 
   return (
     <SafeAreaView>
-      <StyledView>
+      <Styled.Container>
         <View style={styles.formContainer}>
           <View style={styles.logoContainer}>
             <Image source={images.CARPET_LOGO} style={styles.logo} />
           </View>
           <TextInput
             inputProps={{
-              placeholder: '아이디(이메일)',
+              placeholder: `${strings.ID}(${strings.EMAIL})`,
               value: formik.values.id,
               onChangeText: id => formik.setFieldValue('id', id),
             }}
@@ -96,7 +97,7 @@ const SignInScreen: React.FC = function SignInScreen() {
           <TextInput
             inputProps={{
               secureTextEntry: !visiblePassword,
-              placeholder: '비밀번호',
+              placeholder: strings.PASSWORD,
               value: formik.values.password,
               onChangeText: pw => formik.setFieldValue('password', pw),
             }}
@@ -124,22 +125,22 @@ const SignInScreen: React.FC = function SignInScreen() {
           />
           <Button
             onPress={formik.handleSubmit}
-            size="large"
+            size={'large'}
             disabled={!formik.isValid || formik.isSubmitting}
             style={styles.signInButton}
           >
-            로그인
+            {strings.SIGNIN}
           </Button>
           <View style={styles.signInOptionsContainer}>
             <CheckBox
-              label="로그인 상태 유지"
+              label={strings.REMEMBER_USER}
               value={formik.values.rememberUser}
               onChange={checked =>
                 formik.setFieldValue('rememberUser', checked)
               }
             />
             <CheckBox
-              label="아이디 저장"
+              label={strings.REMEMBER_ID}
               value={formik.values.rememberId}
               onChange={checked => formik.setFieldValue('rememberId', checked)}
               style={styles.rememberIdCheckBox}
@@ -147,20 +148,20 @@ const SignInScreen: React.FC = function SignInScreen() {
           </View>
         </View>
         <View style={styles.helpMenu}>
-          <StyledHelpText>아이디 찾기</StyledHelpText>
-          <Divider direction="column" />
-          <StyledHelpText>비밀번호 찾기</StyledHelpText>
-          <Divider direction="column" />
-          <StyledHelpText>회원가입</StyledHelpText>
+          <Styled.HelpText>{strings.FIND_ID}</Styled.HelpText>
+          <Divider direction={'column'} />
+          <Styled.HelpText>{strings.FIND_PASSWORD}</Styled.HelpText>
+          <Divider direction={'column'} />
+          <Styled.HelpText>{strings.SIGNUP}</Styled.HelpText>
         </View>
         <Divider
-          length="90%"
+          length={'90%'}
           color={theme => theme.grey[5]}
-          label="또는"
+          label={strings.OR}
           textColor={theme => theme.grey[3]}
           style={styles.divider}
         />
-        <StyledSocialView>
+        <Styled.Socials>
           <Icon
             src={icons.KAKAO_ICON}
             containerBackground={theme => theme.social.KAKAO}
@@ -181,17 +182,17 @@ const SignInScreen: React.FC = function SignInScreen() {
             src={icons.APPLE_ICON}
             containerBackground={theme => theme.social.APPLE}
           />
-        </StyledSocialView>
-        <View style={styles.previewTextContainer}>
+        </Styled.Socials>
+        <View style={styles.browseAppContainer}>
           <Typography
             onPress={() => navigate('Home')}
             color={theme => theme.grey[1]}
             underline
           >
-            앱 둘러보기
+            {strings.BROWSE_APP}
           </Typography>
         </View>
-      </StyledView>
+      </Styled.Container>
     </SafeAreaView>
   );
 };
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   divider: {
     marginTop: 50,
   },
-  previewTextContainer: {
+  browseAppContainer: {
     marginTop: 50,
     display: 'flex',
     flexDirection: 'row',

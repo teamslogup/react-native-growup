@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, ViewProps } from 'react-native';
-import styled, { css, DefaultTheme, useTheme } from 'styled-components/native';
+import { ViewProps } from 'react-native';
+import { DefaultTheme, useTheme } from 'styled-components/native';
 import Typography from '../Typography';
+import * as Styled from './styles';
 
 interface DividerProps {
   label?: string;
@@ -37,7 +38,7 @@ const Divider: React.FC<DividerProps & ViewProps> = function Divider(props) {
   })();
 
   return (
-    <StyledView
+    <Styled.Container
       length={length}
       thickness={thickness}
       dividerDirection={direction}
@@ -45,46 +46,12 @@ const Divider: React.FC<DividerProps & ViewProps> = function Divider(props) {
       {...viewProps}
     >
       {label && (
-        <StyledLabelContainer>
+        <Styled.LabelContainer>
           <Typography color={labelColor}>{label}</Typography>
-        </StyledLabelContainer>
+        </Styled.LabelContainer>
       )}
-    </StyledView>
+    </Styled.Container>
   );
 };
-
-interface StyledViewProps {
-  length?: string;
-  thickness: number;
-  dividerDirection: 'row' | 'column';
-  color: string;
-}
-
-const StyledView = styled(View)<StyledViewProps>`
-  background-color: ${props => props.color};
-  position: relative;
-
-  ${props =>
-    props.dividerDirection === 'row'
-      ? css`
-          width: ${props.length || 'auto'};
-          height: ${props.thickness};
-        `
-      : css`
-          width: ${props.thickness};
-          height: ${props.length || 'auto'};
-        `}
-`;
-
-const StyledLabelContainer = styled(View)`
-  position: absolute;
-  top: -8px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default Divider;

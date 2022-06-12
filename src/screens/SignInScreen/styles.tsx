@@ -1,18 +1,18 @@
-import { Text, View } from 'react-native';
+import { Text, View as RNView } from 'react-native';
 import styled from 'styled-components/native';
 
-export const StyledView = styled(View)`
+export const Container = styled(RNView)`
   height: 100%;
   background-color: ${props => props.theme.grey.WHITE};
   display: flex;
   align-items: center;
 `;
 
-export const StyledHelpText = styled(Text)`
+export const HelpText = styled(Text)`
   color: ${props => props.theme.grey[2]};
 `;
 
-export const StyledSocialView = styled(View)`
+export const Socials = styled(RNView)`
   margin-top: 50px;
   width: 85%;
   display: flex;

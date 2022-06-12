@@ -1,12 +1,11 @@
 import React from 'react';
 import {
   GestureResponderEvent,
-  Image,
   ImageSourcePropType,
-  Pressable,
   StyleSheet,
 } from 'react-native';
-import styled, { css, DefaultTheme, useTheme } from 'styled-components/native';
+import { DefaultTheme, useTheme } from 'styled-components/native';
+import * as Styled from './styles';
 
 interface IconProps {
   containerSize?: { width: number; height: number };
@@ -38,52 +37,22 @@ const Icon: React.FC<IconProps> = function Icon(props) {
   })();
 
   return (
-    <StyledPressable
+    <Styled.Pressable
       width={containerSize.width}
       height={containerSize.height}
       onPress={onPress}
       shape={shape}
       backgroundColor={bgcolor}
     >
-      <StyledImage
+      <Styled.Image
         width={iconSize.width}
         height={iconSize.height}
         source={src}
         style={styles.icon}
       />
-    </StyledPressable>
+    </Styled.Pressable>
   );
 };
-
-interface StyledPressableProps {
-  width: number;
-  height: number;
-  shape: 'square' | 'circle';
-  backgroundColor: string;
-}
-
-const StyledPressable = styled(Pressable)<StyledPressableProps>`
-  background-color: ${props => props.backgroundColor};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${props =>
-    props.shape === 'circle' &&
-    css`
-      border-radius: ${Math.max(props.width, props.height)};
-    `};
-`;
-
-interface StyledImageProps {
-  width: number;
-  height: number;
-}
-
-const StyledImage = styled(Image)<StyledImageProps>`
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
-`;
 
 const styles = StyleSheet.create({
   icon: {

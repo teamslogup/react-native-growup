@@ -24,7 +24,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-use-before-define': [

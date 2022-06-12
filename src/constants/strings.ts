@@ -1,0 +1,17 @@
+export default {
+  ID: '아이디',
+  EMAIL: '이메일',
+  PASSWORD: '비밀번호',
+  SIGNIN: '로그인',
+  SIGNUP: '회원가입',
+  REQUIRED: '필수',
+  REQUIRED_FIELD: '필수입력 항목입니다.',
+  WRONG_EMAIL_FORM: '잘못된 이메일 형식입니다.',
+  WRONG_ID_OR_PASSWORD: '아이디 혹은 패스워드가 잘못되었습니다',
+  REMEMBER_USER: '로그인 상태 유지',
+  REMEMBER_ID: '아이디 저장',
+  FIND_ID: '아이디 찾기',
+  FIND_PASSWORD: '비밀번호 찾기',
+  OR: '또는',
+  BROWSE_APP: '앱 둘러보기',
+};
