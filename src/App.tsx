@@ -1,13 +1,19 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { RecoilRoot } from 'recoil';
+import { ThemeProvider } from 'styled-components';
+import { RootStackNavigator } from '@src/navigations';
+import { theme } from '@src/styles';
 
 const App: React.FC = function App() {
   return (
-    <SafeAreaView>
-      <View>
-        <Text>Hello</Text>
-      </View>
-    </SafeAreaView>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          <RootStackNavigator />
+        </NavigationContainer>
+      </ThemeProvider>
+    </RecoilRoot>
   );
 };
 
