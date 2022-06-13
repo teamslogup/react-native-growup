@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ViewProps } from 'react-native';
+import { useTheme } from 'styled-components/native';
 import { images } from '@src/assets';
 import * as Styled from './styles';
-
-interface CheckBoxProps {
-  label?: string;
-  value?: boolean;
-  onChange?: (checked: boolean) => unknown;
-  defaultValue?: boolean;
-  disabled?: boolean;
-}
+import { CheckBoxProps } from './types';
 
 const CheckBox: React.FC<CheckBoxProps & ViewProps> = function CheckBox(props) {
   const {
+    variant = 'standard',
     label,
+    labelStyle,
     defaultValue = false,
     value = defaultValue,
     onChange,
@@ -21,6 +17,7 @@ const CheckBox: React.FC<CheckBoxProps & ViewProps> = function CheckBox(props) {
     ...viewProps
   } = props;
 
+  const theme = useTheme();
   const [checked, setChecked] = useState(value);
 
   const toggleChecked = () => {
@@ -30,12 +27,26 @@ const CheckBox: React.FC<CheckBoxProps & ViewProps> = function CheckBox(props) {
     setChecked(!checked);
   };
 
+  useEffect(() => setChecked(value), [value]);
+
   return (
-    <Styled.Container onTouchEnd={toggleChecked}>
-      <Styled.CheckBox value={checked} disabled={disabled} {...viewProps}>
-        {checked && <Styled.CheckImage source={images.CHECK} />}
+    <Styled.Container onTouchEnd={toggleChecked} {...viewProps}>
+      <Styled.CheckBox variant={variant} value={checked} disabled={disabled}>
+        <Styled.CheckImage
+          source={images.CHECK}
+          checked={checked}
+          variant={variant}
+        />
       </Styled.CheckBox>
-      {label && <Styled.Label>{label}</Styled.Label>}
+      {label && (
+        <Styled.Label
+          style={
+            typeof labelStyle === 'function' ? labelStyle(theme) : labelStyle
+          }
+        >
+          {label}
+        </Styled.Label>
+      )}
     </Styled.Container>
   );
 };

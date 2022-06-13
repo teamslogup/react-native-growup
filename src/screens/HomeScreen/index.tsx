@@ -15,10 +15,14 @@ const HomeScreen: React.FC = function HomeScreen() {
     navigate('SignIn');
   };
 
+  const goSignIn = () => navigate('SignIn');
+
   return (
     <SafeAreaView>
       <Text>{user ? user.id : strings.BROWSE_APP}</Text>
-      {user && <Button onPress={signOut}>로그아웃</Button>}
+      <Button onPress={user ? signOut : goSignIn}>
+        {user ? strings.SIGNOUT : strings.SIGNIN}
+      </Button>
     </SafeAreaView>
   );
 };

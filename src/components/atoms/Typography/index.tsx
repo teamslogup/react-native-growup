@@ -1,12 +1,21 @@
 import React, { ReactNode } from 'react';
-import { GestureResponderEvent, Pressable, TextProps } from 'react-native';
+import {
+  GestureResponderEvent,
+  Pressable,
+  TextProps,
+  TextStyle,
+  StyleProp,
+  StyleSheet,
+} from 'react-native';
 import { DefaultTheme, useTheme } from 'styled-components/native';
 import * as Styled from './styles';
 
 interface TypographyProps {
-  fontSize?: number;
+  fontSize?: number | ((theme: DefaultTheme) => number);
+  align?: 'left' | 'center' | 'right';
   color?: string | ((theme: DefaultTheme) => string);
   underline?: boolean;
+  fontWeight?: TextStyle['fontWeight'];
   onPress?: (e: GestureResponderEvent) => unknown;
   children: ReactNode;
 }
@@ -17,9 +26,12 @@ const Typography: React.FC<TypographyProps & TextProps> = function Typograph(
   const {
     fontSize = 16,
     underline = false,
+    align = 'left',
     onPress,
+    fontWeight = '400',
     color,
     children,
+    style: textStyle,
     ...textProps
   } = props;
 
@@ -27,15 +39,21 @@ const Typography: React.FC<TypographyProps & TextProps> = function Typograph(
 
   const textColor = (() => {
     if (color) return typeof color === 'function' ? color(theme) : color;
-    return theme.main.DARK_BLACK;
+    return theme.palette.main.DARK_BLACK;
   })();
+
+  const style: StyleProp<TextStyle> = StyleSheet.compose(textStyle, {
+    textAlign: align,
+    fontWeight,
+  });
 
   return (
     <Pressable onPress={onPress}>
       <Styled.Text
-        fontSize={fontSize}
+        fontSize={typeof fontSize === 'function' ? fontSize(theme) : fontSize}
         textColor={textColor}
         underline={underline}
+        style={style}
         {...textProps}
       >
         {children}

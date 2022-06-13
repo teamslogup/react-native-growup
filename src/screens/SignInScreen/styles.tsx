@@ -3,13 +3,13 @@ import styled from 'styled-components/native';
 
 export const Container = styled(RNView)`
   height: 100%;
-  background-color: ${props => props.theme.grey.WHITE};
+  background-color: ${props => props.theme.palette.grey.WHITE};
   display: flex;
   align-items: center;
 `;
 
 export const HelpText = styled(Text)`
-  color: ${props => props.theme.grey[2]};
+  color: ${props => props.theme.palette.grey[2]};
 `;
 
 export const Socials = styled(RNView)`

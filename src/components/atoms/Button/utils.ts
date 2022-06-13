@@ -12,37 +12,37 @@ type SizeTable = Record<Required<ButtonProps>['size'], string>;
 
 export const backgroundColorTable: ColorTable = {
   contained: {
-    dark: theme => theme.main.DARK_BLACK,
-    light: theme => theme.grey[1],
-    disabled: theme => theme.grey[5],
+    dark: theme => theme.palette.main.DARK_BLACK,
+    light: theme => theme.palette.grey[1],
+    disabled: theme => theme.palette.grey[5],
   },
   inverted: {
-    dark: theme => theme.grey[4],
-    light: theme => theme.grey[5],
-    disabled: theme => theme.grey[5],
+    dark: theme => theme.palette.grey[4],
+    light: theme => theme.palette.grey[5],
+    disabled: theme => theme.palette.grey[5],
   },
   outlined: {
-    dark: theme => theme.grey.WHITE,
-    light: theme => theme.grey.WHITE,
-    disabled: theme => theme.grey.WHITE,
+    dark: theme => theme.palette.grey.WHITE,
+    light: theme => theme.palette.grey.WHITE,
+    disabled: theme => theme.palette.grey.WHITE,
   },
 };
 
 export const textColorTable: ColorTable = {
   contained: {
-    dark: theme => theme.grey.WHITE,
-    light: theme => theme.grey.WHITE,
-    disabled: theme => theme.grey[4],
+    dark: theme => theme.palette.grey.WHITE,
+    light: theme => theme.palette.grey.WHITE,
+    disabled: theme => theme.palette.grey[4],
   },
   inverted: {
-    dark: theme => theme.main.DARK_BLACK,
-    light: theme => theme.main.DARK_BLACK,
-    disabled: theme => theme.grey[4],
+    dark: theme => theme.palette.main.DARK_BLACK,
+    light: theme => theme.palette.main.DARK_BLACK,
+    disabled: theme => theme.palette.grey[4],
   },
   outlined: {
-    dark: theme => theme.main.DARK_BLACK,
-    light: theme => theme.main.DARK_BLACK,
-    disabled: theme => theme.grey[4],
+    dark: theme => theme.palette.main.DARK_BLACK,
+    light: theme => theme.palette.main.DARK_BLACK,
+    disabled: theme => theme.palette.grey[4],
   },
 };
 

@@ -25,6 +25,7 @@ import { strings } from '@src/constants';
 import { SignInParams } from '@src/data';
 import { useScreenNavigation } from '@src/navigations/hooks';
 import { userState } from '@src/services/recoil';
+import { utils } from '@src/utils';
 import * as Styled from './styles';
 
 interface SignInState extends SignInParams {
@@ -42,10 +43,7 @@ const SignInScreen: React.FC = function SignInScreen() {
   const formik = useFormik<SignInState>({
     validationSchema: Yup.object({
       id: Yup.string()
-        .matches(
-          /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$/i,
-          strings.WRONG_EMAIL_FORM,
-        )
+        .matches(utils.EMAIL_REGEX, strings.WRONG_EMAIL_FORM)
         .required(strings.REQUIRED_FIELD),
       password: Yup.string().required(strings.REQUIRED_FIELD),
       rememberId: Yup.boolean(),
@@ -130,6 +128,7 @@ const SignInScreen: React.FC = function SignInScreen() {
           />
           <Button
             onPress={formik.handleSubmit}
+            colorStyle={'light'}
             size={'large'}
             disabled={!formik.isValid || formik.isSubmitting}
             style={styles.signInButton}
@@ -157,41 +156,43 @@ const SignInScreen: React.FC = function SignInScreen() {
           <Divider direction={'column'} />
           <Styled.HelpText>{strings.FIND_PASSWORD}</Styled.HelpText>
           <Divider direction={'column'} />
-          <Styled.HelpText>{strings.SIGNUP}</Styled.HelpText>
+          <Styled.HelpText onPress={() => navigate('SignUpAgreement')}>
+            {strings.SIGNUP}
+          </Styled.HelpText>
         </View>
         <Divider
           length={'90%'}
-          color={theme => theme.grey[5]}
+          color={theme => theme.palette.grey[5]}
           label={strings.OR}
-          textColor={theme => theme.grey[3]}
+          textColor={theme => theme.palette.grey[3]}
           style={styles.divider}
         />
         <Styled.Socials>
           <Icon
             src={icons.KAKAO_ICON}
-            containerBackground={theme => theme.social.KAKAO}
+            containerBackground={theme => theme.palette.social.KAKAO}
           />
           <Icon
             src={icons.NAVER_ICON}
-            containerBackground={theme => theme.social.NAVER}
+            containerBackground={theme => theme.palette.social.NAVER}
           />
           <Icon
             src={icons.GOOGLE_ICON}
-            containerBackground={theme => theme.social.GOOGLE}
+            containerBackground={theme => theme.palette.social.GOOGLE}
           />
           <Icon
             src={icons.FACEBOOK_ICON}
-            containerBackground={theme => theme.social.FACEBOOK}
+            containerBackground={theme => theme.palette.social.FACEBOOK}
           />
           <Icon
             src={icons.APPLE_ICON}
-            containerBackground={theme => theme.social.APPLE}
+            containerBackground={theme => theme.palette.social.APPLE}
           />
         </Styled.Socials>
         <View style={styles.browseAppContainer}>
           <Typography
             onPress={() => navigate('Home')}
-            color={theme => theme.grey[1]}
+            color={theme => theme.palette.grey[1]}
             underline
           >
             {strings.BROWSE_APP}

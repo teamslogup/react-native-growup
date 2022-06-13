@@ -32,30 +32,30 @@ export const TextInput = styled(RNTextInput)<StyledTextInputProps>`
     props.variant === 'standard'
       ? css`
           border-bottom-width: 2px;
-          border-bottom-color: ${props.theme.grey[5]};
+          border-bottom-color: ${props.theme.palette.grey[5]};
 
           ${props.isFocused &&
           css`
-            border-bottom-color: ${props.theme.main.DARK_BLACK};
+            border-bottom-color: ${props.theme.palette.main.DARK_BLACK};
           `}
 
           ${props.error &&
           css`
-            border-bottom-color: ${props.theme.state.RED};
+            border-bottom-color: ${props.theme.palette.state.RED};
           `}
         `
       : css`
           border-width: 1px;
-          border-color: ${props.theme.grey[5]};
+          border-color: ${props.theme.palette.grey[5]};
 
           ${props.isFocused &&
           css`
-            border-color: ${props.theme.main.DARK_BLACK};
+            border-color: ${props.theme.palette.main.DARK_BLACK};
           `}
 
           ${props.error &&
           css`
-            border-color: ${props.theme.state.RED};
+            border-color: ${props.theme.palette.state.RED};
           `}
         `}
 `;
@@ -69,6 +69,6 @@ export const HelperText = styled(Text)<
   ${props =>
     props.error &&
     css`
-      color: ${props.theme.state.RED};
+      color: ${props.theme.palette.state.RED};
     `}
 `;
