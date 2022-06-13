@@ -43,12 +43,22 @@ const SignUpPersonalInformationScreen: React.FC =
     const [visiblePassword, setVisiblePassword] = useState(false);
     const [visiblePasswordConfirm, setVisiblePasswordConfirm] = useState(false);
 
-    const isIdError = formik.values.id.length > 0 && Boolean(formik.errors.id);
-    const isPwError =
-      formik.values.password.length > 0 && Boolean(formik.errors.password);
-    const isPwConfirmError =
-      formik.values.passwordConfirm.length > 0 &&
-      Boolean(formik.errors.passwordConfirm);
+    const getIsError = (field: keyof PersonalInformationFields) =>
+      formik.values[field].length > 0 && Boolean(formik.errors[field]);
+
+    const getHelper = (field: keyof PersonalInformationFields) => {
+      const helper: Record<typeof field, string> = {
+        id: strings.AVAILABLE_ID,
+        password: strings.AVAILABLE_PASSWORD,
+        passwordConfirm: strings.PASSWORD_EQUAL,
+      };
+
+      if (!formik.values[field].length) return undefined;
+
+      if (formik.errors[field]) return formik.errors[field];
+
+      return helper[field];
+    };
 
     return (
       <Styled.SafeAreaView>
@@ -61,8 +71,8 @@ const SignUpPersonalInformationScreen: React.FC =
                 value: formik.values.id,
                 onChangeText: id => formik.setFieldValue('id', id),
               }}
-              error={isIdError}
-              helperText={isIdError ? formik.errors.id : undefined}
+              error={getIsError('id')}
+              helperText={getHelper('id')}
               style={styles.marginTop20}
             />
             <TextInput
@@ -72,8 +82,8 @@ const SignUpPersonalInformationScreen: React.FC =
                 value: formik.values.password,
                 onChangeText: pw => formik.setFieldValue('password', pw),
               }}
-              error={isPwError}
-              helperText={isPwError ? formik.errors.password : undefined}
+              error={getIsError('password')}
+              helperText={getHelper('password')}
               endAdornment={
                 <Pressable
                   onPress={() => setVisiblePassword(visible => !visible)}
@@ -101,10 +111,8 @@ const SignUpPersonalInformationScreen: React.FC =
                 onChangeText: pwc =>
                   formik.setFieldValue('passwordConfirm', pwc),
               }}
-              error={isPwConfirmError}
-              helperText={
-                isPwConfirmError ? formik.errors.passwordConfirm : undefined
-              }
+              error={getIsError('passwordConfirm')}
+              helperText={getHelper('passwordConfirm')}
               endAdornment={
                 <Pressable
                   onPress={() => setVisiblePasswordConfirm(visible => !visible)}
