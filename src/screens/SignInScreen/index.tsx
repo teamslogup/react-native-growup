@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Alert,
   Image,
   Pressable,
   SafeAreaView,
   StyleSheet,
+  TextInput as RNTextInput,
   View,
 } from 'react-native';
 import { useFormik } from 'formik';
@@ -35,6 +36,7 @@ const SignInScreen: React.FC = function SignInScreen() {
   const setUserState = useSetRecoilState(userState);
   const { navigate } = useScreenNavigation();
 
+  const passwordRef = useRef<RNTextInput>(null!);
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const formik = useFormik<SignInState>({
@@ -67,9 +69,10 @@ const SignInScreen: React.FC = function SignInScreen() {
         setUserState(user);
         navigate('Home');
       } else {
-        resetForm();
         Alert.alert(strings.WRONG_ID_OR_PASSWORD);
       }
+
+      resetForm();
     },
   });
 
@@ -89,12 +92,14 @@ const SignInScreen: React.FC = function SignInScreen() {
               placeholder: `${strings.ID}(${strings.EMAIL})`,
               value: formik.values.id,
               onChangeText: id => formik.setFieldValue('id', id),
+              onSubmitEditing: () => passwordRef.current.focus(),
             }}
             error={isIdError}
             helperText={isIdError ? formik.errors.id : undefined}
             style={styles.idField}
           />
           <TextInput
+            inputRef={passwordRef}
             inputProps={{
               secureTextEntry: !visiblePassword,
               placeholder: strings.PASSWORD,

@@ -17,6 +17,7 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
     helperText,
     onSubmit,
     endAdornment,
+    inputRef,
     inputProps,
     ...viewProps
   } = props;
@@ -25,18 +26,19 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
 
   const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setFocused(true);
-    inputProps.onFocus?.call(null, e);
+    inputProps?.onFocus?.call(null, e);
   };
 
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setFocused(false);
-    inputProps.onBlur?.call(null, e);
+    inputProps?.onBlur?.call(null, e);
   };
 
   return (
     <View {...viewProps}>
       <Styled.InputContainer>
         <Styled.TextInput
+          ref={inputRef}
           isFocused={focused}
           variant={variant}
           onFocus={handleFocus}

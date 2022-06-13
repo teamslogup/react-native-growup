@@ -12,10 +12,22 @@ const RootStackNavigator: React.FC = function RootStackNavigator() {
   return (
     <Stack.Navigator
       initialRouteName={user ? 'Home' : 'SignIn'}
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShadowVisible: false,
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+      }}
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="SignIn" component={SignInScreen} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
