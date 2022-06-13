@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Image,
@@ -8,6 +8,7 @@ import {
   TextInput as RNTextInput,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from 'formik';
 import { useSetRecoilState } from 'recoil';
 import * as Yup from 'yup';
@@ -56,12 +57,22 @@ const SignInScreen: React.FC = function SignInScreen() {
       rememberUser: false,
     },
     isInitialValid: false,
-    onSubmit: async ({ id, password }, { setSubmitting, resetForm }) => {
+    onSubmit: async (
+      { id, password, rememberId },
+      { setSubmitting, resetForm, setFieldValue },
+    ) => {
       setSubmitting(true);
 
       const user = await requestSignIn({ id, password });
 
       setSubmitting(false);
+
+      try {
+        if (rememberId) await AsyncStorage.setItem('userID', id);
+        else await AsyncStorage.removeItem('userID');
+      } catch (e) {
+        Alert.alert('AsyncStorage Error');
+      }
 
       if (user) {
         setUserState(user);
@@ -71,8 +82,26 @@ const SignInScreen: React.FC = function SignInScreen() {
       }
 
       resetForm();
+
+      if (rememberId) {
+        setFieldValue('id', id);
+        setFieldValue('rememberId', true);
+      }
     },
   });
+
+  const { setFieldValue } = formik;
+
+  useEffect(() => {
+    (async () => {
+      const id = await AsyncStorage.getItem('userID');
+
+      if (!id) return;
+
+      setFieldValue('id', id).catch(() => {});
+      setFieldValue('rememberId', true).catch(() => {});
+    })().catch(() => Alert.alert('AsyncStorage Error'));
+  }, [setFieldValue]);
 
   const isIdError = formik.values.id.length > 0 && Boolean(formik.errors.id);
   const isPwError =
