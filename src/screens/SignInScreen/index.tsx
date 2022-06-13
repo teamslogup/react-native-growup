@@ -58,7 +58,7 @@ const SignInScreen: React.FC = function SignInScreen() {
     },
     isInitialValid: false,
     onSubmit: async (
-      { id, password, rememberId },
+      { id, password, rememberId, rememberUser },
       { setSubmitting, resetForm, setFieldValue },
     ) => {
       setSubmitting(true);
@@ -67,12 +67,8 @@ const SignInScreen: React.FC = function SignInScreen() {
 
       setSubmitting(false);
 
-      try {
-        if (rememberId) await AsyncStorage.setItem('userID', id);
-        else await AsyncStorage.removeItem('userID');
-      } catch (e) {
-        Alert.alert('AsyncStorage Error');
-      }
+      if (rememberId) AsyncStorage.setItem('userID', id).catch(() => {});
+      else AsyncStorage.removeItem('userID').catch(() => {});
 
       if (user) {
         setUserState(user);
@@ -86,6 +82,12 @@ const SignInScreen: React.FC = function SignInScreen() {
       if (rememberId) {
         setFieldValue('id', id);
         setFieldValue('rememberId', true);
+      }
+
+      if (rememberUser) setFieldValue('rememberUser', true);
+
+      if (user && rememberUser) {
+        AsyncStorage.setItem('user', JSON.stringify(user)).catch(() => {});
       }
     },
   });
