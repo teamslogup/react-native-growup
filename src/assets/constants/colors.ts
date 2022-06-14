@@ -1,0 +1,15 @@
+export default {
+  CARPET_BLACK: '#19191E',
+  DARK_BLACK: '#000000',
+  GRAY1: '#2E2E30',
+  GRAY2: '#646464',
+  GRAY3: '#949494',
+  GRAY4: '#DCDCDC',
+  GRAY5: '#EFEFEF',
+  GRAY6: '#F6F6F6',
+  WHITE: '#FFFFFF',
+  RED: '#E60000',
+  YELLOW: '#FFC600',
+  ORANGE: '#FE7E08',
+  BLUE: '#107EFF',
+} as const;
