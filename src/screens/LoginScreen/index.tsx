@@ -11,11 +11,11 @@ import {
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useDispatch } from 'react-redux';
+import { loginUser } from '@src/services';
 import useScreenNavigation from '../../navigations/hooks/useScreenNavigation';
 import icons from '../../assets/icons';
 import { CheckBoxV } from '../../components/atoms';
 import { HorizonLine, SocialButton } from '../../components/molecules';
-import { loginUser } from '../../action/userAction';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}

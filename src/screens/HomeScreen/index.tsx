@@ -3,10 +3,8 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootState } from '../../reducer';
-import { UserData } from '../../action/type';
-import { logoutUser } from '../../action/userAction';
-import { useScreenNavigation } from '../../navigations/hooks';
+import { useScreenNavigation } from '@src/navigations/hooks';
+import { logoutUser, RootState, UserData } from '@src/services';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}

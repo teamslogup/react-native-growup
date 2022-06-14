@@ -97,11 +97,11 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
-  },
-  "baseUrl": "./",
-  "paths": {
-    "@src/*": ["src/*"]
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"]
+    },
   },
   "include": [
     "__tests__",
