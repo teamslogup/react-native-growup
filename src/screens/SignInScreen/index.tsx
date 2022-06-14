@@ -38,7 +38,8 @@ const SignInScreen: React.FC = function SignInScreen() {
   const setUserState = useSetRecoilState(userState);
   const { navigate } = useScreenNavigation();
 
-  const passwordRef = useRef<RNTextInput>(null!);
+  const passwordRef =
+    useRef<RNTextInput>() as React.MutableRefObject<RNTextInput>;
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const formik = useFormik<SignInState>({
