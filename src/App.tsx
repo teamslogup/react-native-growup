@@ -1,20 +1,20 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { FunctionComponent } from 'react';
+import { Provider } from 'react-redux';
+import { Store, createStore } from 'redux';
+import { RootStackNavigator } from './navigations';
+import rootReducer from './reducer';
 
-const App = function App() {
+const App: FunctionComponent = function App() {
+  const store: Store = createStore(rootReducer);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>{'App'}</Text>
-      </View>
-    </SafeAreaView>
+    <Provider store={store}>
+      <NavigationContainer>
+        <RootStackNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
