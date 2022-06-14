@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Image,
-  Pressable,
   SafeAreaView,
   StyleSheet,
   TextInput as RNTextInput,
@@ -126,7 +125,24 @@ const SignInScreen: React.FC = function SignInScreen() {
             }}
             label={`${strings.ID}(${strings.EMAIL})`}
             error={isIdError}
-            helperText={isIdError ? formik.errors.id : undefined}
+            helper={
+              isIdError ? (
+                <View style={styles.flexDirectionRow}>
+                  <Icon
+                    src={icons.WARNNING}
+                    containerSize={{ width: 16, height: 16 }}
+                    iconSize={{ width: 16, height: 16 }}
+                  />
+                  <Typography
+                    fontSize={theme => theme.typography.size.body3}
+                    color={theme => theme.palette.state.RED}
+                    style={styles.marginLeft5}
+                  >
+                    {formik.errors.id}
+                  </Typography>
+                </View>
+              ) : undefined
+            }
             style={styles.idField}
           />
           <TextInput
@@ -139,23 +155,20 @@ const SignInScreen: React.FC = function SignInScreen() {
             }}
             label={strings.PASSWORD}
             error={isPwError}
-            helperText={isPwError ? formik.errors.password : undefined}
             endAdornment={
-              <Pressable
-                onPress={() => setVisiblePassword(visible => !visible)}
-              >
-                {visiblePassword ? (
-                  <Image
-                    source={icons.VISIBLE_ICON}
-                    style={styles.togglePasswordVisible}
-                  />
-                ) : (
-                  <Image
-                    source={icons.INVISIBLE_ICON}
-                    style={styles.togglePasswordVisible}
-                  />
-                )}
-              </Pressable>
+              visiblePassword ? (
+                <Icon
+                  src={icons.VISIBLE_ICON}
+                  containerSize={{ width: 24, height: 24 }}
+                  onPress={() => setVisiblePassword(visible => !visible)}
+                />
+              ) : (
+                <Icon
+                  src={icons.INVISIBLE_ICON}
+                  containerSize={{ width: 24, height: 24 }}
+                  onPress={() => setVisiblePassword(visible => !visible)}
+                />
+              )
             }
             onSubmit={formik.submitForm}
             style={styles.pwField}
@@ -268,10 +281,6 @@ const styles = StyleSheet.create({
   rememberIdCheckBox: {
     marginLeft: 10,
   },
-  togglePasswordVisible: {
-    width: 24,
-    height: 24,
-  },
   helpMenu: {
     width: '60%',
     marginTop: 50,
@@ -287,6 +296,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  flexDirectionRow: {
+    flexDirection: 'row',
+  },
+  marginLeft5: {
+    marginLeft: 5,
   },
 });
 

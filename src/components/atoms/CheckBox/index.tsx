@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ViewProps } from 'react-native';
 import { useTheme } from 'styled-components/native';
-import { images } from '@src/assets';
+import { icons } from '@src/assets';
 import * as Styled from './styles';
 import { CheckBoxProps } from './types';
 
@@ -33,7 +33,7 @@ const CheckBox: React.FC<CheckBoxProps & ViewProps> = function CheckBox(props) {
     <Styled.Container onTouchEnd={toggleChecked} {...viewProps}>
       <Styled.CheckBox variant={variant} value={checked} disabled={disabled}>
         <Styled.CheckImage
-          source={images.CHECK}
+          source={icons.CHECK}
           checked={checked}
           variant={variant}
         />

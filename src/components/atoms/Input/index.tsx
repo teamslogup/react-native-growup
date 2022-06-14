@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   NativeSyntheticEvent,
+  StyleSheet,
   TextInputFocusEventData,
   View,
   ViewProps,
@@ -16,6 +17,7 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
     label,
     error = false,
     helperText,
+    helper,
     onSubmit,
     endAdornment,
     inputRef,
@@ -72,8 +74,15 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
       {!!helperText && (
         <Styled.HelperText error={error}>{helperText}</Styled.HelperText>
       )}
+      <View style={styles.marginTop5}>{helper}</View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  marginTop5: {
+    marginTop: 5,
+  },
+});
 
 export default TextInput;

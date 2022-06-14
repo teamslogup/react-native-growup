@@ -80,7 +80,7 @@ export const TextInput = styled(RNTextInput)<StyledTextInputProps>`
 export const HelperText = styled(Text)<
   Required<Pick<StyledTextInputProps, 'error'>>
 >`
-  font-size: 12px;
+  font-size: ${props => props.theme.typography.size.body3};
   margin-top: 8px;
 
   ${props =>

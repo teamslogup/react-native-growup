@@ -3,7 +3,13 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { icons } from '@src/assets';
-import { Button, Divider, TextInput } from '@src/components/atoms';
+import {
+  Button,
+  Divider,
+  Icon,
+  TextInput,
+  Typography,
+} from '@src/components/atoms';
 import { strings } from '@src/constants';
 import { useScreenNavigation } from '@src/navigations/hooks';
 import { utils } from '@src/utils';
@@ -55,9 +61,26 @@ const SignUpPersonalInformationScreen: React.FC =
 
       if (!formik.values[field].length) return undefined;
 
-      if (formik.errors[field]) return formik.errors[field];
+      const isError = getIsError(field);
 
-      return helper[field];
+      return (
+        <View style={styles.flexDirectionRow}>
+          <Icon
+            src={isError ? icons.WARNNING : icons.OK}
+            containerSize={{ width: 16, height: 16 }}
+            iconSize={{ width: 16, height: 16 }}
+          />
+          <Typography
+            fontSize={theme => theme.typography.size.body3}
+            color={theme =>
+              isError ? theme.palette.state.RED : theme.palette.main.DARK_BLACK
+            }
+            style={styles.marginLeft5}
+          >
+            {isError ? formik.errors[field] : helper[field]}
+          </Typography>
+        </View>
+      );
     };
 
     return (
@@ -73,7 +96,7 @@ const SignUpPersonalInformationScreen: React.FC =
               }}
               label={`${strings.ID}(${strings.EMAIL})`}
               error={getIsError('id')}
-              helperText={getHelper('id')}
+              helper={getHelper('id')}
               style={styles.marginTop20}
             />
             <TextInput
@@ -85,7 +108,7 @@ const SignUpPersonalInformationScreen: React.FC =
               }}
               label={strings.PASSWORD}
               error={getIsError('password')}
-              helperText={getHelper('password')}
+              helper={getHelper('password')}
               endAdornment={
                 <Pressable
                   onPress={() => setVisiblePassword(visible => !visible)}
@@ -115,7 +138,7 @@ const SignUpPersonalInformationScreen: React.FC =
               }}
               label={`${strings.PASSWORD} ${strings.RECONFIRM}`}
               error={getIsError('passwordConfirm')}
-              helperText={getHelper('passwordConfirm')}
+              helper={getHelper('passwordConfirm')}
               endAdornment={
                 <Pressable
                   onPress={() => setVisiblePasswordConfirm(visible => !visible)}
@@ -156,6 +179,12 @@ const styles = StyleSheet.create({
   togglePasswordVisible: {
     width: 24,
     height: 24,
+  },
+  flexDirectionRow: {
+    flexDirection: 'row',
+  },
+  marginLeft5: {
+    marginLeft: 5,
   },
 });
 

@@ -6,6 +6,7 @@ export interface TextInputProps {
   label?: string;
   error?: boolean;
   helperText?: string;
+  helper?: ReactNode;
   inputRef?: MutableRefObject<TextInput>;
   inputProps?: RNTextInputProps;
   endAdornment?: ReactNode;
