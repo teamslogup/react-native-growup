@@ -56,7 +56,7 @@ const SignInScreen: React.FC = function SignInScreen() {
       rememberId: false,
       rememberUser: false,
     },
-    isInitialValid: false,
+    validateOnMount: true,
     onSubmit: async (
       { id, password, rememberId, rememberUser },
       { setSubmitting, resetForm, setFieldValue },
@@ -123,6 +123,7 @@ const SignInScreen: React.FC = function SignInScreen() {
               onChangeText: id => formik.setFieldValue('id', id),
               onSubmitEditing: () => passwordRef.current.focus(),
             }}
+            label={`${strings.ID}(${strings.EMAIL})`}
             error={isIdError}
             helperText={isIdError ? formik.errors.id : undefined}
             style={styles.idField}
@@ -135,6 +136,7 @@ const SignInScreen: React.FC = function SignInScreen() {
               value: formik.values.password,
               onChangeText: pw => formik.setFieldValue('password', pw),
             }}
+            label={strings.PASSWORD}
             error={isPwError}
             helperText={isPwError ? formik.errors.password : undefined}
             endAdornment={

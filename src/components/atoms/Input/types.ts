@@ -3,6 +3,7 @@ import { TextInput, TextInputProps as RNTextInputProps } from 'react-native';
 
 export interface TextInputProps {
   variant?: 'standard' | 'outlined';
+  label?: string;
   error?: boolean;
   helperText?: string;
   inputRef?: MutableRefObject<TextInput>;

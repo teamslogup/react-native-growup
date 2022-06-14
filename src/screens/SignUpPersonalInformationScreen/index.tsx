@@ -71,6 +71,7 @@ const SignUpPersonalInformationScreen: React.FC =
                 value: formik.values.id,
                 onChangeText: id => formik.setFieldValue('id', id),
               }}
+              label={`${strings.ID}(${strings.EMAIL})`}
               error={getIsError('id')}
               helperText={getHelper('id')}
               style={styles.marginTop20}
@@ -82,6 +83,7 @@ const SignUpPersonalInformationScreen: React.FC =
                 value: formik.values.password,
                 onChangeText: pw => formik.setFieldValue('password', pw),
               }}
+              label={strings.PASSWORD}
               error={getIsError('password')}
               helperText={getHelper('password')}
               endAdornment={
@@ -111,6 +113,7 @@ const SignUpPersonalInformationScreen: React.FC =
                 onChangeText: pwc =>
                   formik.setFieldValue('passwordConfirm', pwc),
               }}
+              label={`${strings.PASSWORD} ${strings.RECONFIRM}`}
               error={getIsError('passwordConfirm')}
               helperText={getHelper('passwordConfirm')}
               endAdornment={

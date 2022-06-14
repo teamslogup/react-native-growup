@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
@@ -13,6 +13,7 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
 ) {
   const {
     variant = 'standard',
+    label,
     error = false,
     helperText,
     onSubmit,
@@ -23,6 +24,7 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
   } = props;
 
   const [focused, setFocused] = useState(false);
+  const [value, setValue] = useState(inputProps?.defaultValue || '');
 
   const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setFocused(true);
@@ -34,9 +36,23 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
     inputProps?.onBlur?.call(null, e);
   };
 
+  const onChange = (newValue: string) => {
+    setValue(newValue);
+    inputProps?.onChangeText?.call(null, newValue);
+  };
+
+  useEffect(() => {
+    setValue(prevValue =>
+      typeof inputProps?.value === 'string' ? inputProps.value : prevValue,
+    );
+  }, [inputProps]);
+
   return (
     <View {...viewProps}>
       <Styled.InputContainer>
+        {!!label && value.length > 0 && (
+          <Styled.Label variant={variant}>{label}</Styled.Label>
+        )}
         <Styled.TextInput
           ref={inputRef}
           isFocused={focused}
@@ -46,6 +62,8 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
           error={error}
           onSubmitEditing={onSubmit}
           {...inputProps}
+          value={value}
+          onChangeText={onChange}
         />
         <Styled.EndAdornmentContainer pointerEvents="box-none">
           {endAdornment}
