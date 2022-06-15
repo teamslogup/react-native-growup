@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components';
@@ -10,7 +10,9 @@ const App: React.FC = function App() {
     <RecoilRoot>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-          <RootStackNavigator />
+          <Suspense fallback={false}>
+            <RootStackNavigator />
+          </Suspense>
         </NavigationContainer>
       </ThemeProvider>
     </RecoilRoot>

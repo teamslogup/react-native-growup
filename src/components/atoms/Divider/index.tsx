@@ -28,7 +28,7 @@ const Divider: React.FC<DividerProps & ViewProps> = function Divider(props) {
 
   const dividerColor = (() => {
     if (color) return typeof color === 'function' ? color(theme) : color;
-    return theme.main.DARK_BLACK;
+    return theme.palette.main.DARK_BLACK;
   })();
 
   const labelColor = (() => {

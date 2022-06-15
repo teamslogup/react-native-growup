@@ -1,11 +1,14 @@
-import { ReactNode } from 'react';
-import { TextInputProps as RNTextInputProps } from 'react-native';
+import { MutableRefObject, ReactNode } from 'react';
+import { TextInput, TextInputProps as RNTextInputProps } from 'react-native';
 
 export interface TextInputProps {
   variant?: 'standard' | 'outlined';
+  label?: string;
   error?: boolean;
   helperText?: string;
-  inputProps: RNTextInputProps;
+  helper?: ReactNode;
+  inputRef?: MutableRefObject<TextInput>;
+  inputProps?: RNTextInputProps;
   endAdornment?: ReactNode;
   onSubmit?: () => unknown;
 }
