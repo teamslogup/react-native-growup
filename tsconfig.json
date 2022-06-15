@@ -97,9 +97,22 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
+    "typeRoots": ["node_modules/@types", "src/@types"],
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"]
+    },
   },
+  "include": [
+    "__tests__",
+    "src",
+    ".eslintrc.js",
+    "babel.config.js",
+    "index.js",
+    "metro.config.js"
+  ],
   "exclude": [
-    "node_modules", "babel.config.js", "metro.config.js", "jest.config.js"
+    "node_modules", "jest.config.js"
   ]
 }
