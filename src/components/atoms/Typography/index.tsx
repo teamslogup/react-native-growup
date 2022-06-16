@@ -37,10 +37,12 @@ const Typography: React.FC<TypographyProps & TextProps> = function Typograph(
 
   const theme = useTheme();
 
-  const textColor = (() => {
-    if (color) return typeof color === 'function' ? color(theme) : color;
+  const getTextColor = () => {
+    if (color) {
+      return typeof color === 'function' ? color(theme) : color;
+    }
     return theme.palette.main.DARK_BLACK;
-  })();
+  };
 
   const style: StyleProp<TextStyle> = StyleSheet.compose(textStyle, {
     textAlign: align,
@@ -51,7 +53,7 @@ const Typography: React.FC<TypographyProps & TextProps> = function Typograph(
     <Pressable onPress={onPress}>
       <Styled.Text
         fontSize={typeof fontSize === 'function' ? fontSize(theme) : fontSize}
-        textColor={textColor}
+        textColor={getTextColor()}
         underline={underline}
         style={style}
         {...textProps}

@@ -66,8 +66,11 @@ const SignInScreen: React.FC = function SignInScreen() {
 
       setSubmitting(false);
 
-      if (rememberId) AsyncStorage.setItem('userID', id).catch(() => {});
-      else AsyncStorage.removeItem('userID').catch(() => {});
+      if (rememberId) {
+        AsyncStorage.setItem('userID', id).catch(() => {});
+      } else {
+        AsyncStorage.removeItem('userID').catch(() => {});
+      }
 
       if (user) {
         setUserState(user);
@@ -83,7 +86,9 @@ const SignInScreen: React.FC = function SignInScreen() {
         setFieldValue('rememberId', true);
       }
 
-      if (rememberUser) setFieldValue('rememberUser', true);
+      if (rememberUser) {
+        setFieldValue('rememberUser', true);
+      }
 
       if (user && rememberUser) {
         AsyncStorage.setItem('user', JSON.stringify(user)).catch(() => {});
@@ -97,7 +102,9 @@ const SignInScreen: React.FC = function SignInScreen() {
     (async () => {
       const id = await AsyncStorage.getItem('userID');
 
-      if (!id) return;
+      if (!id) {
+        return;
+      }
 
       setFieldValue('id', id).catch(() => {});
       setFieldValue('rememberId', true).catch(() => {});

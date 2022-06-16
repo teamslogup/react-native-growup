@@ -22,4 +22,5 @@ export const carpetAxios = createInstance({
   type: 'carpet',
   withCredentials: true,
 });
+
 export const kakaoAxios = createInstance({ type: 'kakao' });

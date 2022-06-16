@@ -88,13 +88,17 @@ const SignUpPersonalInformationScreen: React.FC =
     const [visiblePasswordConfirm, setVisiblePasswordConfirm] = useState(false);
 
     const getIsError = (field: keyof PersonalInformationFields) => {
-      if (field === 'id' && isIdDuplicated) return true;
+      if (field === 'id' && isIdDuplicated) {
+        return true;
+      }
 
       return formik.values[field].length > 0 && Boolean(formik.errors[field]);
     };
 
     const getHelper = (field: keyof PersonalInformationFields) => {
-      if (!formik.values[field].length) return undefined;
+      if (!formik.values[field].length) {
+        return undefined;
+      }
 
       const helper: Record<typeof field, string> = {
         id: strings.AVAILABLE_ID,
@@ -105,7 +109,9 @@ const SignUpPersonalInformationScreen: React.FC =
       const isError = getIsError(field);
 
       const getHelperText = () => {
-        if (field === 'id' && isIdDuplicated) return strings.ID_DUPLICATED;
+        if (field === 'id' && isIdDuplicated) {
+          return strings.ID_DUPLICATED;
+        }
 
         return isError ? formik.errors[field] : helper[field];
       };

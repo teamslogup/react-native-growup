@@ -29,10 +29,11 @@ const Icon: React.FC<IconProps> = function Icon(props) {
   const theme = useTheme();
 
   const bgcolor = (() => {
-    if (containerBackground)
+    if (containerBackground) {
       return typeof containerBackground === 'function'
         ? containerBackground(theme)
         : containerBackground;
+    }
     return 'transparent';
   })();
 

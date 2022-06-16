@@ -21,7 +21,9 @@ const CheckBox: React.FC<CheckBoxProps & ViewProps> = function CheckBox(props) {
   const [checked, setChecked] = useState(value);
 
   const toggleChecked = () => {
-    if (disabled) return;
+    if (disabled) {
+      return;
+    }
 
     onChange?.call(null, !checked);
     setChecked(!checked);

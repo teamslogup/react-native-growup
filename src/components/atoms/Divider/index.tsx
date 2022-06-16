@@ -26,28 +26,31 @@ const Divider: React.FC<DividerProps & ViewProps> = function Divider(props) {
 
   const theme = useTheme();
 
-  const dividerColor = (() => {
-    if (color) return typeof color === 'function' ? color(theme) : color;
+  const getDividerColor = () => {
+    if (color) {
+      return typeof color === 'function' ? color(theme) : color;
+    }
     return theme.palette.main.DARK_BLACK;
-  })();
+  };
 
-  const labelColor = (() => {
-    if (textColor)
+  const getLabelColor = () => {
+    if (textColor) {
       return typeof textColor === 'function' ? textColor(theme) : textColor;
-    return dividerColor;
-  })();
+    }
+    return getDividerColor();
+  };
 
   return (
     <Styled.Container
       length={length}
       thickness={thickness}
       dividerDirection={direction}
-      color={dividerColor}
+      color={getDividerColor()}
       {...viewProps}
     >
       {label && (
         <Styled.LabelContainer>
-          <Typography color={labelColor}>{label}</Typography>
+          <Typography color={getLabelColor()}>{label}</Typography>
         </Styled.LabelContainer>
       )}
     </Styled.Container>
