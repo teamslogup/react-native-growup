@@ -1,5 +1,5 @@
-import React from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Alert, BackHandler, Image, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { images } from '@src/assets';
 import { Button, Typography } from '@src/components/atoms';
@@ -9,6 +9,10 @@ import * as Styled from './styles';
 
 const SignUpCompleteScreen: React.FC = function SignUpCompleteScreen() {
   const { navigate } = useScreenNavigation();
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => true);
+  }, []);
 
   return (
     <Styled.SafeAreaView>
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    zIndex: 9999,
+    zIndex: 2,
   },
   completeImage: {
     width: '70%',
@@ -98,6 +102,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row',
+    zIndex: 3,
   },
   homeButton: {
     flex: 1,
@@ -109,6 +114,7 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    zIndex: 3,
   },
   marginTop15: {
     marginTop: 15,

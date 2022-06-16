@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
+import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
+import { useSetRecoilState } from 'recoil';
+import useSWR from 'swr';
 import * as Yup from 'yup';
+import { requestSignUp } from '@src/apis';
+import { HTTP_STATUS } from '@src/apis/utils';
 import { icons } from '@src/assets';
 import {
   Button,
@@ -11,7 +16,9 @@ import {
   Typography,
 } from '@src/components/atoms';
 import { strings } from '@src/constants';
-import { useScreenNavigation } from '@src/navigations/hooks';
+import { useScreenNavigation, useScreenRoute } from '@src/navigations/hooks';
+import { carpetAxios } from '@src/network/axios';
+import { userState } from '@src/services/recoil';
 import { utils } from '@src/utils';
 import * as Styled from './styles';
 
@@ -23,7 +30,9 @@ type PersonalInformationFields = {
 
 const SignUpPersonalInformationScreen: React.FC =
   function SignUpPersonalInformationScreen() {
+    const setUser = useSetRecoilState(userState);
     const { navigate } = useScreenNavigation();
+    const { params } = useScreenRoute<'SignUpPersonalInformation'>();
 
     const formik = useFormik<PersonalInformationFields>({
       validationSchema: Yup.object({
@@ -43,25 +52,63 @@ const SignUpPersonalInformationScreen: React.FC =
         password: '',
         passwordConfirm: '',
       },
-      onSubmit: () => navigate('SignUpComplete'),
+      onSubmit: async ({ id, password }) => {
+        const result = await requestSignUp({
+          user_eml_addr: id,
+          user_encr_pwd: password,
+          impId: params.impCertRes.imp_uid,
+          bAcceptsEmailMarketing: params.acceptMarketing,
+          bAcceptsPushMarketing: params.acceptMarketing,
+          bAcceptsSMSMarketing: params.acceptMarketing,
+        });
+
+        if (typeof result === 'string') {
+          return Alert.alert(result);
+        }
+
+        setUser(result);
+        return navigate('SignUpComplete');
+      },
     });
+
+    const { data: isIdDuplicated = false } = useSWR(
+      ['/user/check-duplicated-email', formik.values.id],
+      async (url, email) => {
+        try {
+          await carpetAxios.get(`${url}/${email}`);
+
+          return false;
+        } catch (e) {
+          return (e as AxiosError).response?.status === HTTP_STATUS.CONFLICT;
+        }
+      },
+    );
 
     const [visiblePassword, setVisiblePassword] = useState(false);
     const [visiblePasswordConfirm, setVisiblePasswordConfirm] = useState(false);
 
-    const getIsError = (field: keyof PersonalInformationFields) =>
-      formik.values[field].length > 0 && Boolean(formik.errors[field]);
+    const getIsError = (field: keyof PersonalInformationFields) => {
+      if (field === 'id' && isIdDuplicated) return true;
+
+      return formik.values[field].length > 0 && Boolean(formik.errors[field]);
+    };
 
     const getHelper = (field: keyof PersonalInformationFields) => {
+      if (!formik.values[field].length) return undefined;
+
       const helper: Record<typeof field, string> = {
         id: strings.AVAILABLE_ID,
         password: strings.AVAILABLE_PASSWORD,
         passwordConfirm: strings.PASSWORD_EQUAL,
       };
 
-      if (!formik.values[field].length) return undefined;
-
       const isError = getIsError(field);
+
+      const getHelperText = () => {
+        if (field === 'id' && isIdDuplicated) return strings.ID_DUPLICATED;
+
+        return isError ? formik.errors[field] : helper[field];
+      };
 
       return (
         <View style={styles.flexDirectionRow}>
@@ -77,7 +124,7 @@ const SignUpPersonalInformationScreen: React.FC =
             }
             style={styles.marginLeft5}
           >
-            {isError ? formik.errors[field] : helper[field]}
+            {getHelperText()}
           </Typography>
         </View>
       );
@@ -163,7 +210,7 @@ const SignUpPersonalInformationScreen: React.FC =
             onPress={formik.submitForm}
             colorStyle={'light'}
             size={'large'}
-            disabled={!formik.isValid}
+            disabled={!formik.isValid || isIdDuplicated}
           >
             {strings.OK}
           </Button>

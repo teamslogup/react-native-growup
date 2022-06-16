@@ -26,6 +26,7 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'import/prefer-default-export': 'off',
+    'no-underscore-dangle': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-use-before-define': [
       'error',

@@ -1,10 +1,39 @@
 export interface User {
   _id: number;
-  id: string;
-  password: string;
-}
-
-export interface SignInParams {
-  id: string;
-  password: string;
+  user_eml_addr: string;
+  user_encr_pwd: string;
+  user_nm: string;
+  user_bod: string;
+  user_tel_num: string;
+  user_sex_cd: string;
+  prnc_crtf_ci_val: string;
+  prnc_crtf_di_val: string;
+  drmy_yn: boolean;
+  wthd_yn: boolean;
+  user_sns_crtf_info: {
+    sns_splr_nm: string;
+    sns_id: string;
+    acs_tkn_val: string;
+    rfrs_tkn_val: string;
+    sns_eml_addr: string;
+  }[];
+  lgn_fail_cnt: 0;
+  pwd_chng_dt: string;
+  pwd_held_off_dt: string;
+  bAcceptsSMSMarketing: boolean;
+  bAcceptsEmailMarketing: boolean;
+  bAcceptsPushMarketing: boolean;
+  user_bkmk_crpr: string[];
+  fcm_tkn_val: string;
+  user_grad: 0;
+  voc_cnt: 0;
+  revw_cnt: 0;
+  createdAt: string;
+  updatedAt: string;
+  isSnsUser: boolean;
+  leftAt: string;
+  userCreatedAt: string;
+  isVhclRegistered: boolean;
+  userRecommendedCount: 0;
+  submittedCode: string;
 }

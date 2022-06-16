@@ -21,6 +21,8 @@ target 'RNGrowUp' do
 
 
 
+  pod 'iamport-react-native', :path => '../node_modules/iamport-react-native'
+
   target 'RNGrowUpTests' do
     inherit! :complete
     # Pods for testing

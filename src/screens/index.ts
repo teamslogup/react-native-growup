@@ -3,3 +3,5 @@ export { default as SignInScreen } from './SignInScreen';
 export { default as SignUpAgreementScreen } from './SignUpAgreementScreen';
 export { default as SignUpPersonalInformationScreen } from './SignUpPersonalInformationScreen';
 export { default as SignUpCompleteScreen } from './SignUpCompleteScreen';
+export { default as CertificationScreen } from './CertificationScreen';
+export { default as TermsScreen } from './TermsScreen';

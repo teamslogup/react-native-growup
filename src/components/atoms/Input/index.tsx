@@ -74,7 +74,7 @@ const TextInput: React.FC<TextInputProps & ViewProps> = function TextInput(
       {!!helperText && (
         <Styled.HelperText error={error}>{helperText}</Styled.HelperText>
       )}
-      <View style={styles.marginTop5}>{helper}</View>
+      {!!helper && <View style={styles.marginTop5}>{helper}</View>}
     </View>
   );
 };

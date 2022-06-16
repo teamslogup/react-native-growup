@@ -1,37 +1,40 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useFormik } from 'formik';
+import useSWR from 'swr';
 import * as Yup from 'yup';
 import { Button, CheckBox, Divider, Typography } from '@src/components/atoms';
 import { strings } from '@src/constants';
+import { Terms } from '@src/data';
 import { useScreenNavigation } from '@src/navigations/hooks';
+import { carpetAxios } from '@src/network/axios';
 import * as Styled from './styles';
 
-type Agreement = {
-  service: boolean;
-  personalInformation: boolean;
-  personalInformationAgree: boolean;
-  marketing: boolean;
-};
+const MARKETING_TERMS_ID = '6125c9fe71d7b2079ce975fa' as const;
 
 const SignUpAgreementScreen: React.FC = function SignUpAgreementScreen() {
   const { navigate } = useScreenNavigation();
+  const { data = { rows: [] } } = useSWR<{ rows: Terms[] }>(
+    '/user-clau',
+    async (url: string) => (await carpetAxios.get<{ rows: Terms[] }>(url)).data,
+    { suspense: true },
+  );
 
-  const formik = useFormik<Agreement>({
-    validationSchema: Yup.object({
-      service: Yup.boolean().required().oneOf([true]),
-      personalInformation: Yup.boolean().required().oneOf([true]),
-      personalInformationAgree: Yup.boolean().required().oneOf([true]),
-      marketing: Yup.boolean(),
-    }),
-    initialValues: {
-      service: false,
-      personalInformation: false,
-      personalInformationAgree: false,
-      marketing: false,
-    },
+  const formik = useFormik({
+    validationSchema: Yup.object(
+      Object.fromEntries(
+        data.rows.map(({ _id, esnt_clau_yn }) => [
+          _id,
+          esnt_clau_yn ? Yup.boolean().required().oneOf([true]) : Yup.boolean(),
+        ]),
+      ),
+    ),
+    initialValues: Object.fromEntries(data.rows.map(({ _id }) => [_id, false])),
     validateOnMount: true,
-    onSubmit: () => navigate('SignUpPersonalInformation'),
+    onSubmit: values =>
+      navigate('Certification', {
+        acceptMarketing: values[MARKETING_TERMS_ID],
+      }),
   });
 
   const agreeAll = Object.values(formik.values).every(value => value);
@@ -54,7 +57,7 @@ const SignUpAgreementScreen: React.FC = function SignUpAgreementScreen() {
               formik.setValues(
                 Object.fromEntries(
                   Object.keys(formik.values).map(key => [key, value]),
-                ) as Agreement,
+                ),
               )
             }
             style={styles.agreeAll}
@@ -63,91 +66,33 @@ const SignUpAgreementScreen: React.FC = function SignUpAgreementScreen() {
             color={theme => theme.palette.grey[5]}
             style={styles.divider}
           />
-          <View style={styles.checkBoxContainer}>
-            <CheckBox
-              variant={'checkonly'}
-              value={formik.values.service}
-              onChange={value => formik.setFieldValue('service', value)}
-              style={styles.marginRight10}
-            />
-            <Typography
-              style={styles.marginRight10}
-            >{`(${strings.REQUIRED})`}</Typography>
-            <Typography
-              color={theme => theme.palette.grey[1]}
-              style={styles.marginRight10}
-              underline
-            >
-              {strings.SIGNUP_SERVICE_TERMS}
-            </Typography>
-          </View>
-          <View style={styles.checkBoxContainer}>
-            <CheckBox
-              variant={'checkonly'}
-              value={formik.values.personalInformation}
-              onChange={value =>
-                formik.setFieldValue('personalInformation', value)
-              }
-              style={styles.marginRight10}
-            />
-            <Typography
-              style={styles.marginRight10}
-            >{`(${strings.REQUIRED})`}</Typography>
-            <Typography
-              color={theme => theme.palette.grey[1]}
-              style={styles.marginRight10}
-              underline
-            >
-              {strings.SIGNUP_PRIVACY_POLICY}
-            </Typography>
-          </View>
-          <View style={styles.checkBoxContainer}>
-            <CheckBox
-              variant={'checkonly'}
-              value={formik.values.personalInformationAgree}
-              onChange={value =>
-                formik.setFieldValue('personalInformationAgree', value)
-              }
-              style={styles.marginRight10}
-            />
-            <Typography
-              style={styles.marginRight10}
-            >{`(${strings.REQUIRED})`}</Typography>
-            <Typography
-              color={theme => theme.palette.grey[1]}
-              style={styles.marginRight10}
-              underline
-            >
-              {strings.SIGNUP_PRIVACY_POLICY_AGREE}
-            </Typography>
-          </View>
-          <View>
-            <View style={styles.checkBoxContainer}>
+          {data.rows.map(terms => (
+            <View key={terms._id} style={styles.checkBoxContainer}>
               <CheckBox
                 variant={'checkonly'}
-                value={formik.values.marketing}
-                onChange={value => formik.setFieldValue('marketing', value)}
+                value={formik.values[terms._id]}
+                onChange={value => formik.setFieldValue(terms._id, value)}
                 style={styles.marginRight10}
               />
-              <Typography
-                style={styles.marginRight10}
-              >{`(${strings.OPTIONAL})`}</Typography>
+              <Typography style={styles.marginRight10}>
+                {terms.esnt_clau_yn
+                  ? `(${strings.REQUIRED})`
+                  : `(${strings.OPTIONAL})`}
+              </Typography>
               <Typography
                 color={theme => theme.palette.grey[1]}
+                onPress={
+                  terms._id !== MARKETING_TERMS_ID
+                    ? () => navigate('Terms', { terms })
+                    : undefined
+                }
+                underline={terms.esnt_clau_yn}
                 style={styles.marginRight10}
-                underline
               >
-                {strings.SIGNUP_MARKETING_AGREE}
+                {terms.clau_nm}
               </Typography>
             </View>
-            <Typography
-              color={theme => theme.palette.grey[3]}
-              fontSize={theme => theme.typography.size.body3}
-              style={styles.marginTop10}
-            >
-              {strings.SIGNUP_MARKETING_HELP}
-            </Typography>
-          </View>
+          ))}
         </View>
         <Button
           colorStyle={'light'}

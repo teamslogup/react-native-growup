@@ -1,5 +1,6 @@
 export default {
   ID: '아이디',
+  ID_DUPLICATED: '이미 가입된 아이디(이메일)입니다.',
   EMAIL: '이메일',
   PASSWORD: '비밀번호',
   PASSWORD_NOT_EQUAL: '비밀번호가 일치하지 않습니다.',
@@ -38,4 +39,5 @@ export default {
   SIGNUP_COMPLETE_CONGRATULATIONS: '진심으로 축하드립니다.',
   SIGNUP_COMPLETE_REGIST_CAR: '이제 차량을 등록해서',
   SIGNUP_COMPLETE_START_WITH_CARPET: '내 차 관리를 카펫과 함께 시작해보세요.',
+  FAIL_CERT: '인증에 실패하였습니다',
 };

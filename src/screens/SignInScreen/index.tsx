@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from 'formik';
 import { useSetRecoilState } from 'recoil';
 import * as Yup from 'yup';
-import { requestSignIn } from '@src/apis';
+import { requestSignIn, SignInParams } from '@src/apis';
 import { icons, images } from '@src/assets';
 import {
   Button,
@@ -22,7 +22,6 @@ import {
   Typography,
 } from '@src/components/atoms';
 import { strings } from '@src/constants';
-import { SignInParams } from '@src/data';
 import { useScreenNavigation } from '@src/navigations/hooks';
 import { userState } from '@src/services/recoil';
 import { utils } from '@src/utils';
@@ -102,7 +101,7 @@ const SignInScreen: React.FC = function SignInScreen() {
 
       setFieldValue('id', id).catch(() => {});
       setFieldValue('rememberId', true).catch(() => {});
-    })().catch(() => Alert.alert('AsyncStorage Error'));
+    })().catch(() => {});
   }, [setFieldValue]);
 
   const isIdError = formik.values.id.length > 0 && Boolean(formik.errors.id);
@@ -200,9 +199,9 @@ const SignInScreen: React.FC = function SignInScreen() {
         </View>
         <View style={styles.helpMenu}>
           <Styled.HelpText>{strings.FIND_ID}</Styled.HelpText>
-          <Divider direction={'column'} />
+          <Divider length={'80%'} direction={'column'} />
           <Styled.HelpText>{strings.FIND_PASSWORD}</Styled.HelpText>
-          <Divider direction={'column'} />
+          <Divider length={'80%'} direction={'column'} />
           <Styled.HelpText onPress={() => navigate('SignUpAgreement')}>
             {strings.SIGNUP}
           </Styled.HelpText>
@@ -287,6 +286,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   divider: {
     marginTop: 50,
