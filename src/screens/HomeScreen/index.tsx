@@ -1,12 +1,11 @@
-import { Button, Text, View } from 'react-native';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RootState } from '../../reducer';
-import { UserData } from '../../action/type';
-import { logoutUser } from '../../action/userAction';
-import { useScreenNavigation } from '../../navigations/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+import { useScreenNavigation } from '@src/navigations/hooks';
+import { logoutUser, RootState, UserData } from '@src/services';
+import { strings } from '../../constants';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
@@ -21,16 +20,13 @@ const HomeScreen: FunctionComponent<Props> = function HomeScreen() {
   );
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    AsyncStorage.getItem('userId');
     if (userData) {
       setUserId(userData.email);
     }
   }, [userData]);
 
   const onLogOutHandler = () => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    AsyncStorage.removeItem('userId');
+    AsyncStorage.removeItem('user').catch(() => {});
     dispatch(logoutUser());
     navigation.navigate('Login');
   };
@@ -41,16 +37,16 @@ const HomeScreen: FunctionComponent<Props> = function HomeScreen() {
 
   return (
     <SafeAreaView>
-      <Text>HomePage</Text>
+      <Text>{strings.HOME}</Text>
       {userData ? (
         <View>
-          <Text>ID: {userId} </Text>
-          <Button title="LogOut" onPress={onLogOutHandler} />
+          <Text>{`${strings.ID_EMAIL}: ${userId} `}</Text>
+          <Button title={strings.LOGOUT} onPress={onLogOutHandler} />
         </View>
       ) : (
         <View>
-          <Text>앱 둘러보기</Text>
-          <Button title="LogIn" onPress={onLogInhandler} />
+          <Text>{strings.APP_SEE}</Text>
+          <Button title={strings.LOGIN} onPress={onLogInhandler} />
         </View>
       )}
     </SafeAreaView>

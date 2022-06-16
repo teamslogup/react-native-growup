@@ -1,9 +1,9 @@
-import { NavigationContainer } from '@react-navigation/native';
 import React, { FunctionComponent } from 'react';
 import { Provider } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
 import { Store, createStore } from 'redux';
 import { RootStackNavigator } from './navigations';
-import rootReducer from './reducer';
+import { rootReducer } from './services';
 
 const App: FunctionComponent = function App() {
   const store: Store = createStore(rootReducer);

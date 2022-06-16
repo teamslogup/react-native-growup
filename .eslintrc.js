@@ -34,6 +34,17 @@ module.exports = {
     '@typescript-eslint/no-throw-literal': 'off',
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'import/order': [
+      'error',
+      {
+        pathGroups: [
+          { pattern: 'react*', group: 'builtin', position: 'before' },
+          { pattern: '@src/**', group: 'external', position: 'after' },
+        ],
+        pathGroupsExcludedImportTypes: ['builtin'],
+        alphabetize: { order: 'asc' },
+      },
+    ],
   },
   settings: {
     react: {

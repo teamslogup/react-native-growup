@@ -1,4 +1,4 @@
-import { SetUserDataAction, USER_DATA } from './type';
+import { SetUserDataAction, USER_DATA } from '../types';
 
 export const loginUser = (dataToSubmit: {
   email: string;

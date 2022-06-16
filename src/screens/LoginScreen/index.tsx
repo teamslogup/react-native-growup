@@ -1,3 +1,4 @@
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -8,14 +9,14 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 import { useDispatch } from 'react-redux';
-import useScreenNavigation from '../../navigations/hooks/useScreenNavigation';
+import AsyncStorage from '@react-native-community/async-storage';
+import { loginUser } from '@src/services';
 import icons from '../../assets/icons';
-import { CheckBoxV } from '../../components/atoms';
+import RoundCheckBox from '../../components/atoms/RoundCheckBox';
 import { HorizonLine, SocialButton } from '../../components/molecules';
-import { loginUser } from '../../action/userAction';
+import { strings, colors } from '../../constants';
+import useScreenNavigation from '../../navigations/hooks/useScreenNavigation';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
@@ -35,9 +36,37 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    AsyncStorage.getItem('userId');
-  }, [navigation]);
+    AsyncStorage.getItem('user', (error, result) => {
+      if (error) {
+        return;
+      }
+
+      if (result) {
+        const userInfo = JSON.parse(result) as {
+          email: string;
+          password: string;
+        };
+
+        dispatch(loginUser(userInfo));
+        navigation.navigate('Home');
+      }
+    }).catch(() => {});
+
+    AsyncStorage.getItem('userEmail', (error, result) => {
+      if (error) {
+        return;
+      }
+
+      if (result) {
+        setEmail(result);
+        setMemoLogin(true);
+      }
+    }).catch(() => {});
+  }, [dispatch, navigation, memoLogin]);
+
+  useEffect(() => {
+    if (!memoLogin) AsyncStorage.removeItem('userEmail').catch(() => {});
+  }, [memoLogin]);
 
   const loginHandler = () => {
     const body = { email, password };
@@ -62,11 +91,16 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
 
     if (body.email === 'mobile@slogup.com' && body.password === '123qwe!') {
       if (autoLogin) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        AsyncStorage.setItem('userId', body.email);
+        AsyncStorage.setItem(
+          'user',
+          JSON.stringify({ email: body.email, password: body.password }),
+        ).catch(() => {});
       }
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      if (memoLogin) AsyncStorage.setItem('userId', body.email);
+      if (memoLogin) {
+        AsyncStorage.setItem('userEmail', body.email).catch(() => {});
+      } else {
+        AsyncStorage.removeItem('userEmail').catch(() => {});
+      }
       setEmail('');
       setPassword('');
       dispatch(loginUser(body));
@@ -74,7 +108,7 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
     }
   };
 
-  function borderCheck(inputData: string, alertData: boolean) {
+  const getBorderStyle = (inputData: string, alertData: boolean) => {
     if (inputData.length === 0) {
       return styles.borderBottomOff;
     }
@@ -82,22 +116,22 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
       return styles.borderBottomRed;
     }
     return styles.borderBottomOn;
-  }
+  };
 
-  const onVisibleHandler = () => {
+  const onVisibleButtonPress = () => {
     setPasswordVisible(!passwordVisible);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
+    <SafeAreaView style={styles.background}>
+      <View style={styles.container}>
         <View style={styles.logoBox}>
           <Image source={icons.APP_LOGO} style={styles.logo} />
         </View>
 
         <TextInput
           onChangeText={text => setEmail(text)}
-          style={borderCheck(email, emailAlert)}
+          style={getBorderStyle(email, emailAlert)}
           placeholder="아이디(이메일)"
           value={email}
         />
@@ -105,7 +139,7 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
         {emailAlert ? (
           <View style={styles.rowView}>
             <Image source={icons.WARNING_CIRCLE} style={styles.warning} />
-            <Text style={styles.textAlert}>잘못된 이메일 형식입니다.</Text>
+            <Text style={styles.textAlert}>{strings.WRONG_EMAIL}</Text>
           </View>
         ) : null}
 
@@ -113,11 +147,11 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
           <TextInput
             placeholder="비밀번호"
             onChangeText={text => setPassword(text)}
-            style={borderCheck(password, passwordAlert)}
+            style={getBorderStyle(password, passwordAlert)}
             value={password}
             secureTextEntry={passwordVisible}
           />
-          <Pressable onPress={onVisibleHandler} style={styles.visibleBox}>
+          <Pressable onPress={onVisibleButtonPress} style={styles.visibleBox}>
             {passwordVisible ? (
               <Image source={icons.INVISIBLE} style={styles.visibleButton} />
             ) : (
@@ -129,7 +163,7 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
         {passwordAlert ? (
           <View style={styles.rowView}>
             <Image source={icons.WARNING_CIRCLE} style={styles.warning} />
-            <Text style={styles.textAlert}>잘못된 비밀번호 형식입니다.</Text>
+            <Text style={styles.textAlert}>{strings.WRONG_PASSWORD}</Text>
           </View>
         ) : null}
 
@@ -139,42 +173,54 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
             style={styles.LoginButtonOff}
             disabled
           >
-            <Text style={styles.LoginButtonTextOff}>로그인</Text>
+            <Text style={styles.LoginButtonTextOff}>{strings.LOGIN}</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={loginHandler} style={styles.LoginButtonOn}>
-            <Text style={styles.LoginButtonTextOn}>로그인</Text>
+            <Text style={styles.LoginButtonTextOn}>{strings.LOGIN}</Text>
           </TouchableOpacity>
         )}
 
         <View style={styles.checkBoxGroup}>
-          <CheckBoxV checkBool={setAutoLogin} checkText={'로그인 상태 유지'} />
-          <CheckBoxV checkBool={setMemoLogin} checkText={'아이디저장'} />
+          <RoundCheckBox
+            checkBool={autoLogin}
+            checkSetBool={setAutoLogin}
+            checkText={strings.LOGIN_STATUS_ON}
+            uncheckButtonImage={icons.UNCHECK_BUTTON}
+            checkButtonImage={icons.CHECK_BUTTON}
+          />
+          <RoundCheckBox
+            checkBool={memoLogin}
+            checkSetBool={setMemoLogin}
+            checkText={strings.ID_SAVE}
+            uncheckButtonImage={icons.UNCHECK_BUTTON}
+            checkButtonImage={icons.CHECK_BUTTON}
+          />
         </View>
         <View style={styles.singInCategory}>
           <Text
             style={styles.singInCategoryText}
             onPress={() => navigation.navigate('Register')}
           >
-            아이디 찾기
+            {strings.ID_FIND}
           </Text>
           <Text style={styles.textSpace}>|</Text>
           <Text
             style={styles.singInCategoryText}
             onPress={() => navigation.navigate('Register')}
           >
-            비밀번호 찾기
+            {strings.PASSWORD_FIND}
           </Text>
           <Text style={styles.textSpace}>|</Text>
           <Text
             style={styles.singInCategoryText}
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => navigation.navigate('Agreement')}
           >
-            회원가입
+            {strings.SIGN_UP}
           </Text>
         </View>
 
-        <HorizonLine lineText="또는" />
+        <HorizonLine lineText={strings.OR} />
 
         <SocialButton />
 
@@ -182,7 +228,7 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
           style={styles.homeButton}
           onPress={() => navigation.navigate('Home')}
         >
-          앱 둘러보기
+          {strings.APP_SEE}
         </Text>
       </View>
     </SafeAreaView>
@@ -192,10 +238,12 @@ const LoginScreen: FunctionComponent<Props> = function LoginScreen() {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
+    backgroundColor: colors.WHITE,
+  },
+  container: {
     margin: 20,
-    // alignItems: 'center',
   },
   logoBox: {
     width: '100%',
@@ -213,8 +261,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 56,
     lineHeight: 24,
-    marginBottom: 5,
-    marginTop: 5,
+    marginBottom: 8,
+    marginTop: 8,
     fontSize: 16,
     fontWeight: '400',
   },
@@ -277,6 +325,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     fontWeight: '400',
     marginLeft: 5,
+    marginBottom: 5,
   },
   checkBoxGroup: {
     flexDirection: 'row',

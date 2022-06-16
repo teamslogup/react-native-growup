@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
-  lineText: string;
+  lineText?: string;
 }
 
 const HorizonLine: FunctionComponent<Props> = function HorizonLine({

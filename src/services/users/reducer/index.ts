@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { UserDataState, SetUserDataAction, USER_DATA } from '../action/type';
+import { UserDataState, SetUserDataAction, USER_DATA } from '../types';
 
 export const loginState: UserDataState = {
   userData: null,

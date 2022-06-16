@@ -1,9 +1,10 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type RootStackParams = {
-  Login: { message: string } | undefined;
-  Register: { message: string } | undefined;
-  Home: { message: string } | undefined;
+  Login: undefined;
+  Register: undefined;
+  Home: undefined;
+  Agreement: undefined;
 };
 
 export type RootStackNavigationProp =
