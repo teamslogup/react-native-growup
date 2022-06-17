@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Alert, SafeAreaView, StyleSheet } from 'react-native';
 import IMP, { IMPData } from 'iamport-react-native';
 import { strings } from '@src/constants';
 import { IMPCertificationResponse } from '@src/data';
@@ -32,7 +32,6 @@ const CertificationScreen: React.FC = function CertificationScreen() {
             min_age: '',
           } as IMPData.CertificationData
         }
-        loading={<View />}
         callback={onCertificationEnd}
       />
     </SafeAreaView>

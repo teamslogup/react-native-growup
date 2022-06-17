@@ -15,7 +15,12 @@ type CreateInstanceConfig = {
 const createInstance = (config: CreateInstanceConfig) => {
   const { type, withCredentials = false } = config;
 
-  return axios.create({ baseURL: baseURLs[type], withCredentials });
+  const instance = axios.create({
+    baseURL: baseURLs[type],
+    withCredentials,
+  });
+
+  return instance;
 };
 
 export const carpetAxios = createInstance({

@@ -1,19 +1,14 @@
 import { User } from '@src/data';
-
-export interface BadReqeustResponse {
-  rows: {
-    domain: string;
-    code: string;
-    param: string;
-    msg: string;
-    value: string;
-  }[];
-  count: number;
-}
+import { Row } from '@src/network/types';
 
 export interface SignInParams {
   id: string;
   password: string;
+}
+
+export interface SignInSuccessResult {
+  user: User;
+  authToken: string;
 }
 
 export interface SignUpParams {
@@ -34,23 +29,21 @@ export interface SignUpParams {
   submitted_code?: string;
 }
 
-export interface SignInSuccessResponse {
-  row: {
-    _id: string;
-    tkn_val: string;
-    user: User;
-    user_ip_addr: string;
-    plfm_nm: string;
-    plfm_vrsn_val: string;
-    os_nm: string;
-    brws_nm: string;
-    lgn_yn: boolean;
-    admr_id: string;
-    admr_nm: string;
-    unread_noti_count: number;
-    createdAt: string;
-    updatedAt: string;
-  };
-}
+export type SignInSuccessResponse = Row<{
+  _id: string;
+  tkn_val: string;
+  user: User;
+  user_ip_addr: string;
+  plfm_nm: string;
+  plfm_vrsn_val: string;
+  os_nm: string;
+  brws_nm: string;
+  lgn_yn: boolean;
+  admr_id: string;
+  admr_nm: string;
+  unread_noti_count: number;
+  createdAt: string;
+  updatedAt: string;
+}>;
 
 export type SignUpSuccessResponse = SignInSuccessResponse;

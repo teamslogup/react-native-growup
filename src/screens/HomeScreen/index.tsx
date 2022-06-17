@@ -16,7 +16,7 @@ const HomeScreen: React.FC = function HomeScreen() {
     requestSignOut().catch(() => {});
     setUser(null);
     navigate('SignIn');
-    AsyncStorage.removeItem('user').catch(() => {});
+    AsyncStorage.removeItem('auth').catch(() => {});
   };
 
   const goSignIn = () => navigate('SignIn');

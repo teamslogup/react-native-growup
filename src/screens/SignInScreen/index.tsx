@@ -62,7 +62,7 @@ const SignInScreen: React.FC = function SignInScreen() {
     ) => {
       setSubmitting(true);
 
-      const user = await requestSignIn({ id, password });
+      const result = await requestSignIn({ id, password });
 
       setSubmitting(false);
 
@@ -72,8 +72,8 @@ const SignInScreen: React.FC = function SignInScreen() {
         AsyncStorage.removeItem('userID').catch(() => {});
       }
 
-      if (user) {
-        setUserState(user);
+      if (result) {
+        setUserState(result.user);
         navigate('Home');
       } else {
         Alert.alert(strings.WRONG_ID_OR_PASSWORD);
@@ -90,8 +90,10 @@ const SignInScreen: React.FC = function SignInScreen() {
         setFieldValue('rememberUser', true);
       }
 
-      if (user && rememberUser) {
-        AsyncStorage.setItem('user', JSON.stringify(user)).catch(() => {});
+      if (result && rememberUser) {
+        AsyncStorage.setItem('auth', JSON.stringify(result.authToken)).catch(
+          () => {},
+        );
       }
     },
   });
@@ -126,7 +128,8 @@ const SignInScreen: React.FC = function SignInScreen() {
             inputProps={{
               placeholder: `${strings.ID}(${strings.EMAIL})`,
               value: formik.values.id,
-              onChangeText: id => formik.setFieldValue('id', id),
+              onChangeText: id =>
+                formik.setFieldValue('id', id.replace(' ', '')),
               onSubmitEditing: () => passwordRef.current.focus(),
             }}
             label={`${strings.ID}(${strings.EMAIL})`}
@@ -157,7 +160,8 @@ const SignInScreen: React.FC = function SignInScreen() {
               secureTextEntry: !visiblePassword,
               placeholder: strings.PASSWORD,
               value: formik.values.password,
-              onChangeText: pw => formik.setFieldValue('password', pw),
+              onChangeText: pw =>
+                formik.setFieldValue('password', pw.replace(' ', '')),
             }}
             label={strings.PASSWORD}
             error={isPwError}

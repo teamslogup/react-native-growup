@@ -145,7 +145,8 @@ const SignUpPersonalInformationScreen: React.FC =
               inputProps={{
                 placeholder: `${strings.ID}(${strings.EMAIL})`,
                 value: formik.values.id,
-                onChangeText: id => formik.setFieldValue('id', id),
+                onChangeText: id =>
+                  formik.setFieldValue('id', id.replace(' ', '')),
               }}
               label={`${strings.ID}(${strings.EMAIL})`}
               error={getIsError('id')}
@@ -157,7 +158,8 @@ const SignUpPersonalInformationScreen: React.FC =
                 secureTextEntry: !visiblePassword,
                 placeholder: strings.PASSWORD,
                 value: formik.values.password,
-                onChangeText: pw => formik.setFieldValue('password', pw),
+                onChangeText: pw =>
+                  formik.setFieldValue('password', pw.replace(' ', '')),
               }}
               label={strings.PASSWORD}
               error={getIsError('password')}

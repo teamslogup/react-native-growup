@@ -8,15 +8,16 @@ import { strings } from '@src/constants';
 import { Terms } from '@src/data';
 import { useScreenNavigation } from '@src/navigations/hooks';
 import { carpetAxios } from '@src/network/axios';
+import { Rows } from '@src/network/types';
 import * as Styled from './styles';
 
 const MARKETING_TERMS_ID = '6125c9fe71d7b2079ce975fa' as const;
 
 const SignUpAgreementScreen: React.FC = function SignUpAgreementScreen() {
   const { navigate } = useScreenNavigation();
-  const { data = { rows: [] } } = useSWR<{ rows: Terms[] }>(
+  const { data = { rows: [] } } = useSWR<Rows<Terms>>(
     '/user-clau',
-    async (url: string) => (await carpetAxios.get<{ rows: Terms[] }>(url)).data,
+    async (key: string) => (await carpetAxios.get<Rows<Terms>>(key)).data,
     { suspense: true },
   );
 

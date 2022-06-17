@@ -4,6 +4,7 @@ import { carpetAxios } from '@src/network/axios';
 import {
   SignInParams,
   SignInSuccessResponse,
+  SignInSuccessResult,
   SignUpParams,
   SignUpSuccessResponse,
 } from './type';
@@ -11,14 +12,27 @@ import {
 export const requestSignIn = async ({
   id,
   password,
-}: SignInParams): Promise<User | null> => {
+}: SignInParams): Promise<SignInSuccessResult | null> => {
   try {
     const res = await carpetAxios.post<SignInSuccessResponse>(
       '/user/sessions/me',
       { user_eml_addr: id, pass: password },
     );
 
-    return res.data.row.user;
+    if (!res.headers['x-auth-token']) {
+      throw new Error();
+    }
+
+    carpetAxios.interceptors.request.use(req => {
+      req.headers = { 'x-auth-token': res.headers['x-auth-token'] };
+
+      return req;
+    });
+
+    return {
+      user: res.data.row.user,
+      authToken: res.headers['x-auth-token'],
+    };
   } catch (e) {
     return null;
   }
